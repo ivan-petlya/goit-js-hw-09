@@ -20,9 +20,11 @@ const options = {
     if (selectDayHourMinSec < Date.now()) {
       window.alert('Please choose a date in the future');
       btnStart.disabled = true;
+      btnStart.style.backgroundColor = '#FFB4E8';
       return;
     }
     btnStart.disabled = false;
+    btnStart.style.backgroundColor = '#B4FFCE';
     function timeCounter() {
       const intervalId = setInterval(() => {
         const currenTime = Date.now();
@@ -31,6 +33,7 @@ const options = {
 
         if (deltaTime <= 0) {
           clearInterval(intervalId);
+          timer.style.color = '#FFB4E8';
           return;
         }
         convertMs(deltaTime);

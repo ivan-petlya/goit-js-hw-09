@@ -23,4 +23,12 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px;
+}
+.value {
+  font-size: 30px;
+}
+.label {
+  text-transform: uppercase;
+  font-size: 12px;
 }
