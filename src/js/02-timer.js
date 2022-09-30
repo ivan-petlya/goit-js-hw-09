@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import Notiflix from 'notiflix';
 
 const btnStart = document.querySelector('button[data-start]');
 const timer = document.querySelector('.timer');
@@ -18,7 +19,7 @@ const options = {
     const selectDayHourMinSec = selectedDates[0].getTime();
 
     if (selectDayHourMinSec < Date.now()) {
-      window.alert('Please choose a date in the future');
+      Notiflix.Notify.failure('Please choose a date in the future!');
       btnStart.disabled = true;
       btnStart.style.backgroundColor = '#FFB4E8';
       return;
