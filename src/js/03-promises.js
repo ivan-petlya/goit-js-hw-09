@@ -36,6 +36,6 @@ function onSabmit(event) {
           `❌ Rejected promise ${position} in ${delay}ms`
         );
       });
-    delayStep += 1;
+    mainDelay += delayStep;
   }
 }
