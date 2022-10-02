@@ -10,8 +10,8 @@ const btnStop = document.querySelector('button[data-stop]');
 let intervalId = null;
 
 btnStart.addEventListener('click', () => {
+  disabledBtnStart();
   intervalId = setInterval(() => {
-    disabledBtnStart();
     let newColor = getRandomHexColor();
     body.style.backgroundColor = newColor;
     console.log('new color set, button "start" disabled');

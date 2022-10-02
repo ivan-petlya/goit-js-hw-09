@@ -18,11 +18,10 @@ function createPromise(position, delay) {
 
 function onSabmit(event) {
   event.preventDefault();
-  let mainDelay = Number(document.querySelector('input[name=delay]').value);
-  let delayStep = Number(document.querySelector('input[name=step]').value);
-  let amountOfPromises = Number(
-    document.querySelector('input[name=amount]').value
-  );
+  let itemForm = event.currentTarget.elements;
+  let mainDelay = Number(itemForm.delay.value);
+  let delayStep = Number(itemForm.step.value);
+  let amountOfPromises = Number(itemForm.amount.value);
 
   for (let i = 1; i <= amountOfPromises; i += 1) {
     createPromise(i, mainDelay)

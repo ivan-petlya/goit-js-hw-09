@@ -9,6 +9,9 @@ const daysContent = document.querySelector('span[data-days]');
 const hoursContent = document.querySelector('span[data-hours]');
 const minutesContent = document.querySelector('span[data-minutes]');
 const secondsContent = document.querySelector('span[data-seconds]');
+// let selectedDate = null;
+btnStart.disabled = true;
+btnStart.addEventListener('click', timeCounter);
 
 const options = {
   enableTime: true,
@@ -16,53 +19,55 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    const selectDayHourMinSec = selectedDates[0].getTime();
-
-    if (selectDayHourMinSec < Date.now()) {
+    const selectedDate = selectedDates[0];
+    if (selectedDates[0].getTime() < Date.now()) {
       Notiflix.Notify.failure('Please choose a date in the future!');
       btnStart.disabled = true;
       btnStart.style.backgroundColor = '#FFB4E8';
-      return;
+    } else {
+      inputDate.dataset.time = selectedDate.getTime();
+      btnStart.disabled = false;
+      btnStart.style.backgroundColor = '#B4FFCE';
     }
-    btnStart.disabled = false;
-    btnStart.style.backgroundColor = '#B4FFCE';
-    function timeCounter() {
-      const intervalId = setInterval(() => {
-        const currenTime = Date.now();
-        const deadlineTime = selectedDates[0];
-        const deltaTime = deadlineTime - currenTime;
-
-        if (deltaTime <= 0) {
-          clearInterval(intervalId);
-          timer.style.color = '#FFB4E8';
-          return;
-        }
-        convertMs(deltaTime);
-      }, 1000);
-    }
-    btnStart.addEventListener('click', timeCounter);
   },
 };
 
 flatpickr(inputDate, options);
+btnStart.addEventListener('click', timeCounter);
 
+function timeCounter() {
+  btnStart.disabled = true;
+  inputDate.disabled = true;
+  const timeMsec = Number(inputDate.dataset.time);
+  const intervalId = setInterval(() => {
+    let currentTime = new Date().getTime();
+    let deltaTime = timeMsec - currentTime;
+    const convertedTime = convertMs(deltaTime);
+    const { days, hours, minutes, seconds } = convertedTime;
+    if (deltaTime < 1000) {
+      clearInterval(intervalId);
+      timer.style.color = '#FFB4E8';
+    }
+    apdateTime(days, hours, minutes, seconds);
+  }, 1000);
+}
+function apdateTime(days, hours, minutes, seconds) {
+  daysContent.textContent = addLeadingZero(days);
+  hoursContent.textContent = addLeadingZero(hours);
+  minutesContent.textContent = addLeadingZero(minutes);
+  secondsContent.textContent = addLeadingZero(seconds);
+}
 function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
-  const days = addLeadingZero(Math.floor(ms / day));
-  const hours = addLeadingZero(Math.floor((ms % day) / hour));
-  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
-  const seconds = addLeadingZero(
-    Math.floor((((ms % day) % hour) % minute) / second)
-  );
-  daysContent.textContent = days;
-  hoursContent.textContent = hours;
-  minutesContent.textContent = minutes;
-  secondsContent.textContent = seconds;
+  const days = Math.floor(ms / day);
+  const hours = Math.floor((ms % day) / hour);
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
   return { days, hours, minutes, seconds };
 }
 function addLeadingZero(value) {
-  return String(value).padStart(2, 0);
+  return value.toString().padStart(2, 0);
 }
